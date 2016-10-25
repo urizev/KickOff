@@ -1,6 +1,6 @@
 package com.urizev.kickoff;
 
-import android.util.ArrayMap;
+import android.support.v4.util.ArrayMap;
 
 import com.urizev.kickoff.annotations.KOProvide;
 
@@ -33,7 +33,7 @@ public class KickOff {
 
     public KickOff provide(Object provider) {
         Class clazz = provider.getClass();
-        Method[] methods = clazz.getDeclaredMethods();
+        Method[] methods = clazz.getMethods();
         for (Method method : methods) {
             KOProvide annotation = method.getAnnotation(KOProvide.class);
             if (annotation != null) {
@@ -61,7 +61,6 @@ public class KickOff {
     }
 
     public void unsubscribe(Object object) {
-        Class clazz = object.getClass();
         List<KickOffSubscriber> subscribers = this.subscribers.remove(object);
 
         for (KickOffSubscriber subscriber : subscribers) {

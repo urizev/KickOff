@@ -12,22 +12,20 @@ import java.util.List;
 
 class KickOffSubscriberExemplar {
     final String[] tags;
-    private final Class clazz;
     final Method method;
 
-    private KickOffSubscriberExemplar(Class clazz, Method method, String[] tags) {
-        this.clazz = clazz;
+    private KickOffSubscriberExemplar(Method method, String[] tags) {
         this.tags = tags;
         this.method = method;
     }
 
-    public KickOffSubscriber newSubscriber(Object subscriber) {
+    KickOffSubscriber newSubscriber(Object subscriber) {
         return new KickOffSubscriber(this, subscriber);
     }
 
     static List<KickOffSubscriberExemplar> loadExemplars(Class clazz) {
         List<KickOffSubscriberExemplar> exemplars = new ArrayList<>();
-        Method [] methods = clazz.getDeclaredMethods();
+        Method [] methods = clazz.getMethods();
         for (Method method : methods) {
             KOSubscribe annotation = method.getAnnotation(KOSubscribe.class);
             if (annotation == null) {
@@ -38,7 +36,7 @@ class KickOffSubscriberExemplar {
                 continue;
             }
 
-            exemplars.add(new KickOffSubscriberExemplar(clazz, method, tags));
+            exemplars.add(new KickOffSubscriberExemplar(method, tags));
         }
 
         return exemplars;
